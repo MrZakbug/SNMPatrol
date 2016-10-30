@@ -1,0 +1,53 @@
+Main modules:
+
+Listener:
+Ask device every x minutes for full list of OIDs and statuses put full status in string variable
+(
+ask device under IP for full OID status list 
+put the list as string into variable
+sleep x seconds
+)
+
+Data processor:
+Import full oid status, compare it with list of oids we want and put statuses in DB
+(
+for each line in full status
+	if oid in csv (file with oids we are interested in)
+		transfer line into readable directory with OID as key and status as value
+		put data into DB
+)
+
+Presentation functions (separate file for each function):
+Import data from DB, compare them and prepare data for visualization (avg, min, max, up/down)
+(
+import data drom DB
+prepare value for presentation
+)
+
+
+Minor modules:
+
+Login module with different user rights 
+(
+Admin - adding/removing/editing devices, monitoring, edditing users, ?setting up notifications?
+Technician - adding/removing/editing devices, monitoring,
+Non-IT guest - Monitoring
+)
+
+Device Administration
+(
+Adding, Removing, Editing
+(ID, name, system, IP, ?)
+)
+
+Data Base Administration
+(
+CRUD functions
+)
+
+
+?Notification system?
+(
+?e-mail?
+?sms?
+)

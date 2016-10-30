@@ -1,0 +1,3 @@
+http://initd.org/psycopg/ - modul do postgressa
+PySNMP - pysnmp.sourceforge.net/
+https://documentation.mailgun.com/quickstart-sending.html#how-to-verify-your-domain
