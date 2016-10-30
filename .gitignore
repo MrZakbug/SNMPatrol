@@ -217,5 +217,5 @@ pip-log.txt
 
 
 #Mine
-__pycache__/
-mightbeneeded/
+Bin/__pycache__/
+Bin/mightbeneeded/
