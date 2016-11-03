@@ -3,7 +3,7 @@ Main modules:
 Listener:
 Ask device every x minutes for full list of OIDs and statuses put full status in string variable
 (
-ask device under IP for full OID status list 
+ask device under IP for full OID status list
 put the list as string into variable
 sleep x seconds
 )
@@ -27,18 +27,13 @@ prepare value for presentation
 
 Minor modules:
 
-Login module with different user rights 
+Login module with different user rights
 (
 Admin - adding/removing/editing devices, monitoring, edditing users, ?setting up notifications?
 Technician - adding/removing/editing devices, monitoring,
 Non-IT guest - Monitoring
 )
 
-Device Administration
-(
-Adding, Removing, Editing
-(ID, name, system, IP, ?)
-)
 
 Data Base Administration
 (
@@ -46,8 +41,17 @@ CRUD functions
 )
 
 
-?Notification system?
+Notification system
 (
-?e-mail?
-?sms?
+e-mail
+preconfigured msgs. What alerts should we send.
+)
+
+Device Administration
+(
+device class
+standard information - ip_adress, name, system?
+divide by type of device (server, switch, router, )
+divide by system?
+during init create a list of mibs and create tables
 )
