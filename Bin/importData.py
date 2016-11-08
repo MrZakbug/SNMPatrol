@@ -31,7 +31,7 @@ def insert_data():
     for line in read_file:                               # IF-MIB::ifInOctets.1 = Counter32: 5217689
         file_line = line.split('::')                     # ifInOctets.1 = Counter32: 5217689
         mib_category = file_line[1].split('=')           # Counter32: 5217689
-        mib_value= mib_category[1].split(':')            # 5217689\n
+        mib_value = mib_category[1].split(':')           # 5217689\n
         value = mib_value[-1].strip()                    # 5217689
         mib_name = mib_category[0].split('.')
         if mib_name[0] in list_of_value_mib():
@@ -42,7 +42,8 @@ def insert_data():
                     print('Creating table ' + mib)
                 except sqlite3.OperationalError:
                     break
-            db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(mib), (strftime("%Y%m%d",), strftime("%H:%M:%S", ), value))
+            db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(mib),
+                       (strftime("%Y%m%d",), strftime("%H:%M:%S", ), value))
             db.commit()
 
 
