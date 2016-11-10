@@ -28,15 +28,19 @@ def insert_data():
     # load and insert data
     mib_trap = 'required\\' + random.choice(files) + '.txt'
     read_file = open(mib_trap, 'r')
-    for line in read_file:                               # IF-MIB::ifInOctets.1 = Counter32: 5217689
-        file_line = line.split('::')                     # ifInOctets.1 = Counter32: 5217689
-        mib_category = file_line[1].split('=')           # Counter32: 5217689
-        mib_value = mib_category[1].split(':')           # 5217689\n
-        value = mib_value[-1].strip()                    # 5217689
-        mib_name = mib_category[0].split('.')
-        if mib_name[0] in list_of_value_mib():
-            mib = mib_name[0] + mib_name[1]
+    for line in read_file:                                          # IF-MIB::ifInOctets.1 = Counter32: 10786522
+        file_line = line.split('::')                                # ['IF-MIB', 'ifInOctets.1 = Counter32: 10786522\n']
+        mib_category = file_line[1].split('=')                      # ['ifInOctets.1 ', ' Counter32: 10786522\n']
+        if mib_category[0].rstrip(' ') in list_of_value_mib():
+            mib_value = mib_category[1].split(':')                  # [' Counter32', '10786522\n'}
+            value = mib_value[-1].strip()                           # 10786522
+            mib_name = mib_category[0].split('.')                   # ['ifInOctets', '1 ']
+            if len(mib_name) > 1:
+                mib = mib_name[0] + mib_name[1].rstrip(' ')
+            else:
+                mib = mib_name[0].rstrip(' ')
             while True:
+
                 try:
                     db.execute('create table {} (date text, datetime text, value text)'.format(mib))
                     print('Creating table ' + mib)
@@ -52,3 +56,4 @@ for i in range(0, 100):
     cursor = db.execute('select * from ifInOctets1')
     print(cursor.fetchall())
     sleep(5)
+# insert_data()
