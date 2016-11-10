@@ -21,11 +21,9 @@ def list_of_value_mib():
     return value_mibs
 
 
-db = sqlite3.connect('SNMPatrol.db')  # Create a database
-
-
-def insert_data():
-    # load and insert data
+def get_mib_list_values():
+    # Prepares a list of mibs and their values
+    mib = []
     mib_trap = 'required\\' + random.choice(files) + '.txt'
     read_file = open(mib_trap, 'r')
     for line in read_file:                                          # IF-MIB::ifInOctets.1 = Counter32: 10786522
@@ -36,24 +34,33 @@ def insert_data():
             value = mib_value[-1].strip()                           # 10786522
             mib_name = mib_category[0].split('.')                   # ['ifInOctets', '1 ']
             if len(mib_name) > 1:
-                mib = mib_name[0] + mib_name[1].rstrip(' ')
+                mib.append(mib_name[0] + mib_name[1].rstrip(' '))
             else:
-                mib = mib_name[0].rstrip(' ')
-            while True:
-
-                try:
-                    db.execute('create table {} (date text, datetime text, value text)'.format(mib))
-                    print('Creating table ' + mib)
-                except sqlite3.OperationalError:
-                    break
-            db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(mib),
-                       (strftime("%Y%m%d",), strftime("%H:%M:%S", ), value))
-            db.commit()
+                mib.append(mib_name[0].rstrip(' '))
+    return mib, value
 
 
-for i in range(0, 100):
-    insert_data()
-    cursor = db.execute('select * from ifInOctets1')
-    print(cursor.fetchall())
-    sleep(5)
-# insert_data()
+def insert_data():
+    # Connect/creates a database, creates tables if don't exist, puts data into
+
+    db = sqlite3.connect('SNMPatrol.db')  # Create a database
+    mib, value = get_mib_list_values()    # Assigns values from get_mib_list_values function
+    for m in mib:
+        while True:
+            try:
+                db.execute('create table {} (date text, datetime text, value text)'.format(m))
+                print('Creating table ' + m)
+            except sqlite3.OperationalError:
+                print('Table {} already exists.'.format(m))
+                break
+        db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
+                   (strftime("%Y%m%d",), strftime("%H:%M:%S", ), value))
+        db.commit()
+
+if __name__ == '__main__':
+    db = sqlite3.connect('SNMPatrol.db')
+    for i in range(0, 100):
+        insert_data()
+        cursor = db.execute('select * from ifInOctets1')
+        print(cursor.fetchall())
+        sleep(5)
