@@ -4,19 +4,40 @@ import sqlite3
 db = sqlite3.connect('SNMPatrol.db')
 
 
+def import_data(table_name, *args):
+    values = []
+    seq = ("'", "'")
+    if len(args) == 0:
+        for value in db.execute('select value from {}'.format(table_name)):
+            values.append(value[0])
+    if len(args) in [1, 2]:
+        for value in db.execute('select value from {} where date between {} and {}'
+                                    .format(table_name, args[0].join(seq), args[1].join(seq))):
+            values.append(value[0])
+    if len(args) in [3, 4]:
+        for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'
+                                    .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
+                                            args[3].join(seq))):
+            values.append(value)
+    return values
+
+
 def import_timed_data(table_name, start_date, end_date, start_time, end_time):
     # Fetch data from the table and put into list variable
     values = []
-    for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'\
-                                    .format(table_name, start_date, end_date, start_time, end_time)):
+    seq = ("'", "'")
+    for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'
+                                    .format(table_name, start_date.join(seq), end_date.join(seq),
+                                            start_time.join(seq), end_time.join(seq))):
         values.append(value[0])
     return values
 
 
 def import_dated_data(table_name, start_date, end_date):
     values = []
+    seq = ("'", "'")
     for value in db.execute('select value from {} where date between {} and {}'\
-                                    .format(table_name, start_date, end_date)):
+                                    .format(table_name, start_date.join(seq), end_date.join(seq))):
         values.append(value[0])
     return values
 
@@ -31,7 +52,8 @@ def import_data(table_name):
 def avg_value(values):
     # Count the avg and return
     value = 0
-    count =0
+    count = 0
+    avg = 0
     for v in values:
         value += int(v)
         count += 1
@@ -46,14 +68,8 @@ def min_value(values):
     return min(values)
 
 
-print(avg_value(import_data('ifInOctets1')))
-print(max_value(import_data('ifInOctets1')))
-print(min_value(import_data('ifInOctets1')))
+if __name__ == '__main__':
 
-# print(import_dated_data('ifInOctets1', '20141013', '20161015'))
+    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/13')))
 
-# cursor = db.execute('select * from ifInOctets1')
-# print(cursor.fetchall())
-#
-#
-# print(import_timed_data('ifInOctets1','20141013', '20161014', '10:14:34', '16:18:40'))
+    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/12', '00-00-00', '23-01-05')))
