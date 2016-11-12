@@ -55,3 +55,9 @@ divide by type of device (server, switch, router, )
 divide by system?
 during init create a list of mibs and create tables
 )
+
+
+DB optimization
+last_week - 5 mins
+last month - avg value per hour
+previous months - avg value per 3 hours
