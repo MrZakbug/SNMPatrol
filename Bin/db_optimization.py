@@ -12,7 +12,7 @@ def last_week_optimization():
         # for each hour
             # avg the values
             # delete all the values in this time stamp
-            # insert avg value with specific time
+            # insert avg value with specific tim
 
 
 def last_month_optimization():
