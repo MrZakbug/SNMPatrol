@@ -46,4 +46,4 @@ if __name__ == '__main__':
 
     print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/13')))
 
-    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/12', '00-00-01', '23-01-05')))
+    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/12', '00:00:01', '23:01:05')))

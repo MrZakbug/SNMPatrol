@@ -54,7 +54,7 @@ def insert_data():
                 print('Table {} already exists.'.format(m))
                 break
         db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
-                   (strftime("%Y/%m/%d",), strftime("%H-%M-%S", ), value))
+                   (strftime("%Y/%m/%d",), strftime("%H:%M:%S",), value))
         db.commit()
 
 if __name__ == '__main__':
