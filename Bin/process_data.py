@@ -18,34 +18,7 @@ def import_data(table_name, *args):
         for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'
                                     .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
                                             args[3].join(seq))):
-            values.append(value)
-    return values
-
-
-def import_timed_data(table_name, start_date, end_date, start_time, end_time):
-    # Fetch data from the table and put into list variable
-    values = []
-    seq = ("'", "'")
-    for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'
-                                    .format(table_name, start_date.join(seq), end_date.join(seq),
-                                            start_time.join(seq), end_time.join(seq))):
-        values.append(value[0])
-    return values
-
-
-def import_dated_data(table_name, start_date, end_date):
-    values = []
-    seq = ("'", "'")
-    for value in db.execute('select value from {} where date between {} and {}'\
-                                    .format(table_name, start_date.join(seq), end_date.join(seq))):
-        values.append(value[0])
-    return values
-
-
-def import_data(table_name):
-    values = []
-    for value in db.execute('select value from {}'.format(table_name)):
-        values.append(value[0])
+            values.append(value[0])
     return values
 
 
@@ -64,6 +37,7 @@ def avg_value(values):
 def max_value(values):
     return max(values)
 
+
 def min_value(values):
     return min(values)
 
@@ -72,4 +46,4 @@ if __name__ == '__main__':
 
     print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/13')))
 
-    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/12', '00-00-00', '23-01-05')))
+    print(avg_value(import_data('ifInOctets1', '2016/11/12', '2016/11/12', '00-00-01', '23-01-05')))
