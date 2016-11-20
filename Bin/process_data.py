@@ -23,6 +23,19 @@ def import_data(table_name, *args):
     return values
 
 
+def delete_data(table_name, *args):
+    seq = ("'", "'")
+    if len(args) == 0:
+        db.execute('delete * from {}'.format(table_name))
+    if len(args) in [1, 2]:
+        db.execute('delete * from {} where date between {} and {}'
+                   .format(table_name, args[0].join(seq), args[1].join(seq)))
+    if len(args) in [3, 4]:
+        db.execute('delete * from {} where (date between {} and {}) and (datetime between {} and {})'
+                   .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
+                           args[3].join(seq)))
+    db.commit()
+
 def db_to_json(table_name, *args):
     seq = ("'", "'")
     if len(args) == 0:
