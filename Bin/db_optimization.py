@@ -1,26 +1,29 @@
-import sqlite3
 import datetime
-from process_data import import_data, avg_value, delete_data
+from process_data import *
 
 
 db = sqlite3.connect('SNMPatrol.db')
 
 
-def last_week_optimization(table_name, start_date, end_date, start_time, end_time):
+def last_week_optimization(table_name):
     today = datetime.date.today()
-    for day in range(8, 15):
+    for day in range(7, 8):
         for hour in range(0, 24):
-            if len(hour) < 2:
-                hour = '0' + str(hour)
+            if hour < 10:
+                current_hour = '0' + str(hour) + ':00:00'
+                next_hour = '0' + str(hour) + ':59:59'
             else:
-                hour = str(hour)
-            avg = avg_value(import_data(table_name, today + datetime.timedelta(days=day),
-                                        today + datetime.timedelta(days=day), hour + ':00:00',
-                                        str(int(hour)+1)) + ':00:00')
-            delete_data(import_data(table_name, today + datetime.timedelta(days=day),
-                                    today + datetime.timedelta(days=day), hour + ':00:00', str(int(hour)+1) + ':00:00'))
-            db.execute('INSERT INTO {} (DATE, DATETIME, VALUES) VALUES(?, ?, ? )'.format(table_name),
-                       (today + datetime.timedelta(days=day), hour + ':30:00', avg))
+                current_hour = str(hour) + ':00:00'
+                next_hour = str(hour) + ':59:59'
+
+            todayz = today - datetime.timedelta(days=day)
+            todayz.strftime("%Y/%m/%d")
+            print(todayz)
+            avg = avg_value(import_data(table_name, todayz, todayz, current_hour, next_hour))
+            # print(todayz, current_hour, next_hour, avg)
+            delete_data(table_name, todayz, todayz, current_hour, next_hour)
+            db.execute('INSERT INTO {} (DATE, DATETIME, VALUE) VALUES(?, ?, ? )'.format(table_name),
+                       (todayz, current_hour, avg))
             db.commit()
 
 
@@ -42,5 +45,4 @@ def previous_months_optimization():
 
 if __name__ == '__main__':
     db = sqlite3.connect('SNMPatrol.db')
-    # last_week_optimization('ifInOctets1', '2016/11/12', '2016/11/12', '00-00-01', '23-01-05')
-    print(datetime.date.today())
+    last_week_optimization('hrDeviceDescr196608')
