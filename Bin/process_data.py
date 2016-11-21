@@ -1,5 +1,4 @@
 import sqlite3
-import json
 
 # Connect to DB
 db = sqlite3.connect('SNMPatrol.db')
@@ -34,6 +33,9 @@ def delete_data(table_name, *args):
 
 
 def db_to_json(table_name, *args):
+    json_list = []
+    json_output = {table_name: json_list}
+
     if len(args) == 0:
         cursor = db.execute('select * from {}'.format(table_name))
 
@@ -43,7 +45,11 @@ def db_to_json(table_name, *args):
     if len(args) in [3, 4]:
         cursor = db.execute('select * from {} where date between ? and ? and datetime between ? and ?'
                             .format(table_name), (args[0], args[1], args[2], args[3]))
-    print(json.dumps(cursor.fetchall()))
+
+    for row in cursor.fetchall():
+        json_dict = {'date': row[0], 'datetime': row[1], 'value': row[2]}
+        json_list.append(json_dict)
+    return json_output
 
 
 def avg_value(values):
@@ -68,12 +74,9 @@ def min_value(values):
 
 if __name__ == '__main__':
 
-    print(import_data('ifInOctets1', '2016/11/14', '2016/11/14'))
-    print(avg_value(import_data('ifInOctets1', '2016/11/14', '2016/11/14')))
-
     print(import_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '23:11:55'))
     print(avg_value(import_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:11:55')))
 
     db_to_json('ifInOctets1', '2016/11/14', '2016/11/14', '12:15:30', '12:30:05')
 
-    delete_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:15:30')
+    # delete_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:15:30')
