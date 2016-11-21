@@ -16,14 +16,11 @@ def last_week_optimization(table_name):
                 current_hour = str(hour) + ':00:00'
                 next_hour = str(hour) + ':59:59'
 
-            todayz = today - datetime.timedelta(days=day)
-            todayz.strftime("%Y/%m/%d")
-            print(todayz)
-            avg = avg_value(import_data(table_name, todayz, todayz, current_hour, next_hour))
-            # print(todayz, current_hour, next_hour, avg)
-            delete_data(table_name, todayz, todayz, current_hour, next_hour)
+            day_to_optimize = today - datetime.timedelta(days=day)
+            avg = avg_value(import_data(table_name, day_to_optimize, day_to_optimize, current_hour, next_hour))
+            delete_data(table_name, day_to_optimize, day_to_optimize, current_hour, next_hour)
             db.execute('INSERT INTO {} (DATE, DATETIME, VALUE) VALUES(?, ?, ? )'.format(table_name),
-                       (todayz, current_hour, avg))
+                       (day_to_optimize, current_hour, avg))
             db.commit()
 
 

@@ -1,6 +1,7 @@
 import sqlite3
 import random
 from time import strftime, sleep
+from datetime import date
 
 files = ['MIB16', 'MIB2', 'MIB3', 'MIB4', 'MIB5',
          'MIB6', 'MIB7', 'MIB8', 'MIB9', 'MIB10',
@@ -54,13 +55,51 @@ def insert_data():
                 print('Table {} already exists.'.format(m))
                 break
         db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
-                   (strftime("%Y/%m/%d",), strftime("%H:%M:%S",), value))
+                   (strftime("%Y-%m-%d",), strftime("%H:%M:%S",), value))
         db.commit()
+
+
+def insert_test_data():
+    start_date = date(2016, 11, 1).toordinal()
+    end_date = date.today().toordinal()
+
+    db = sqlite3.connect('SNMPatrol.db')  # Create a database
+    mib, value = get_mib_list_values()  # Assigns values from get_mib_list_values function
+    for m in mib:
+        while True:
+            try:
+                db.execute('create table {} (date text, datetime text, value text)'.format(m))
+                print('Creating table ' + m)
+            except sqlite3.OperationalError:
+                break
+        for i in range(1, 10000):
+            random_hour = str(random.randrange(0, 24))
+            if len(random_hour) < 2:
+                random_hour = '0' + random_hour
+
+            random_minute = str(random.randrange(0, 60))
+            if len(random_minute) < 2:
+                random_minute = '0' + random_minute
+
+            random_second = str(random.randrange(0, 60))
+            if len(random_second) < 2:
+                random_second = '0' + random_second
+
+            random_time = random_hour + ':' + random_minute + ':' + random_second
+            print(random_time)
+            db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
+                       (date.fromordinal(random.randint(start_date, end_date)), random_time, random.randrange(20, 100)))
+
+            db.commit()
 
 if __name__ == '__main__':
     db = sqlite3.connect('SNMPatrol.db')
+
+    insert_test_data()
+    '''
     for i in range(0, 100):
         insert_data()
         cursor = db.execute('select * from ifInOctets1')
         print(cursor.fetchall())
         sleep(5)
+    '''
