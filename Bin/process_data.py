@@ -7,48 +7,42 @@ db = sqlite3.connect('SNMPatrol.db')
 
 def import_data(table_name, *args):
     values = []
-    seq = ("'", "'")
     if len(args) == 0:
         for value in db.execute('select value from {}'.format(table_name)):
             values.append(value[0])
     if len(args) in [1, 2]:
-        for value in db.execute('select value from {} where date between {} and {}'
-                                .format(table_name, args[0].join(seq), args[1].join(seq))):
+        for value in db.execute('select value from {} where date between ? and ?'
+                                .format(table_name), (args[0], args[1])):
             values.append(value[0])
     if len(args) in [3, 4]:
-        for value in db.execute('select value from {} where (date between {} and {}) and (datetime between {} and {})'
-                                .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
-                                        args[3].join(seq))):
+        for value in db.execute('select value from {} where (date between ? and ?) and (datetime between ? and ?)'
+                                .format(table_name), (args[0], args[1], args[2], args[3])):
             values.append(value[0])
     return values
 
 
 def delete_data(table_name, *args):
-    seq = ("'", "'")
     if len(args) == 0:
         db.execute('delete from {}'.format(table_name))
     if len(args) in [1, 2]:
-        db.execute('delete from {} where date between {} and {}'
-                   .format(table_name, args[0].join(seq), args[1].join(seq)))
+        db.execute('delete from {} where date between ? and ?'
+                   .format(table_name), (args[0], args[1]))
     if len(args) in [3, 4]:
-        db.execute('delete from {} where (date between {} and {}) and (datetime between {} and {})'
-                   .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
-                           args[3].join(seq)))
+        db.execute('delete from {} where (date between ? and ?) and (datetime between ? and ?)'
+                   .format(table_name), (args[0], args[1], args[2], args[3]))
     db.commit()
 
 
 def db_to_json(table_name, *args):
-    seq = ("'", "'")
     if len(args) == 0:
         cursor = db.execute('select * from {}'.format(table_name))
 
     if len(args) in [1, 2]:
-        cursor = db.execute('select * from {} where date between {} and {}'
-                            .format(table_name, args[0].join(seq), args[1].join(seq)))
+        cursor = db.execute('select * from {} where date between ? and ?'
+                            .format(table_name), (args[0], args[1]))
     if len(args) in [3, 4]:
-        cursor = db.execute('select * from {} where date between {} and {} and datetime between {} and {}'
-                            .format(table_name, args[0].join(seq), args[1].join(seq), args[2].join(seq),
-                                    args[3].join(seq)))
+        cursor = db.execute('select * from {} where date between ? and ? and datetime between ? and ?'
+                            .format(table_name), (args[0], args[1], args[2], args[3]))
     print(json.dumps(cursor.fetchall()))
 
 
@@ -73,13 +67,13 @@ def min_value(values):
 
 
 if __name__ == '__main__':
-    '''
+
     print(import_data('ifInOctets1', '2016/11/14', '2016/11/14'))
     print(avg_value(import_data('ifInOctets1', '2016/11/14', '2016/11/14')))
 
     print(import_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '23:11:55'))
     print(avg_value(import_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:11:55')))
 
-    db_to_json('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:14:05')
-    '''
-    delete_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:14:30')
+    db_to_json('ifInOctets1', '2016/11/14', '2016/11/14', '12:15:30', '12:30:05')
+
+    delete_data('ifInOctets1', '2016/11/14', '2016/11/14', '12:10:01', '12:15:30')
