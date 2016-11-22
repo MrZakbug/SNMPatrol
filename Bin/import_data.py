@@ -72,7 +72,7 @@ def insert_test_data():
                 print('Creating table ' + m)
             except sqlite3.OperationalError:
                 break
-        for i in range(1, 10000):
+        for i in range(1, 10001):
             random_hour = str(random.randrange(0, 24))
             if len(random_hour) < 2:
                 random_hour = '0' + random_hour
@@ -86,7 +86,6 @@ def insert_test_data():
                 random_second = '0' + random_second
 
             random_time = random_hour + ':' + random_minute + ':' + random_second
-            print(random_time)
             db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
                        (date.fromordinal(random.randint(start_date, end_date)), random_time, random.randrange(20, 100)))
 
