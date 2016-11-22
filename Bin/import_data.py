@@ -58,7 +58,7 @@ def insert_data():
                    (strftime("%Y-%m-%d",), strftime("%H:%M:%S",), value))
         db.commit()
 
-
+'''
 def insert_test_data():
     start_date = date(2016, 11, 1).toordinal()
     end_date = date.today().toordinal()
@@ -90,15 +90,11 @@ def insert_test_data():
                        (date.fromordinal(random.randint(start_date, end_date)), random_time, random.randrange(20, 100)))
 
             db.commit()
-
+'''
 if __name__ == '__main__':
     db = sqlite3.connect('SNMPatrol.db')
-
-    insert_test_data()
-    '''
     for i in range(0, 100):
         insert_data()
         cursor = db.execute('select * from ifInOctets1')
         print(cursor.fetchall())
         sleep(5)
-    '''
