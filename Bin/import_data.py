@@ -1,7 +1,9 @@
 import sqlite3
 import random
 from time import strftime, sleep
-from datetime import date
+import mailing_alerts as mail
+import process_data as process
+from datetime import date, timedelta
 
 files = ['MIB16', 'MIB2', 'MIB3', 'MIB4', 'MIB5',
          'MIB6', 'MIB7', 'MIB8', 'MIB9', 'MIB10',
@@ -57,8 +59,18 @@ def insert_data():
         db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(m),
                    (strftime("%Y-%m-%d",), strftime("%H:%M:%S",), value))
         db.commit()
+        warning_trigger(m, value)
 
-'''
+
+def warning_trigger(m, value):
+    today = date.today()
+    avg = process.avg_value(process.import_data(m, today - timedelta(days=1), today))
+    if value > avg*5:
+        mail.send_email(mail.sender, mail.recipients, mail.email_subject, mail.create_msg('PL-S001', m, value, avg))
+
+
+
+    '''
 def insert_test_data():
     start_date = date(2016, 11, 1).toordinal()
     end_date = date.today().toordinal()
@@ -90,11 +102,15 @@ def insert_test_data():
                        (date.fromordinal(random.randint(start_date, end_date)), random_time, random.randrange(20, 100)))
 
             db.commit()
-'''
+    '''
+
 if __name__ == '__main__':
+    warning_trigger(m='ifInOctets1', value=100)
+    '''
     db = sqlite3.connect('SNMPatrol.db')
     for i in range(0, 100):
         insert_data()
         cursor = db.execute('select * from ifInOctets1')
         print(cursor.fetchall())
         sleep(5)
+    '''
