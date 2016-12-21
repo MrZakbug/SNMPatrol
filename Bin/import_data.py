@@ -11,10 +11,10 @@ files = ['MIB16', 'MIB2', 'MIB3', 'MIB4', 'MIB5',
          'MIB16', 'MIB17', 'MIB18', 'MIB19', 'MIB20', ]
 
 
-def list_of_value_mib():
+def list_of_value_mib(name):
     # Read file and create a list of MIBs of value
     # Read file with MIBs we want
-    value_mibs_path = 'required\\neededMIB.txt'
+    value_mibs_path = 'required\\neededMIB-' + name + '.txt'
     read_file = open(value_mibs_path, 'r')
     # Create a list
     value_mibs = []
