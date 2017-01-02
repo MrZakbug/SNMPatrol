@@ -1,20 +1,10 @@
-import sqlite3
-import datetime
-import random
-import smtplib
-import os
-import platform
-from time import strftime, sleep
-from datetime import date, timedelta
-from pysnmp.hlapi import *
-from multiprocessing import Pool
+import device_class
 
 
-import process_data as process
-import db_optimization as optimization
-import import_data as data
-import mailing as mail
-import connection
+with open('required\\Config.txt', 'r') as inf:
+    config = eval(inf.read())
 
-
+for device in config['Devices']:
+    device['Device Name'] = device_class.Device(device['Device Name'], device['Device IP Address'],
+                                                device['Device DNS'], device['Device OS'], device['Device Type'])
 
