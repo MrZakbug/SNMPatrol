@@ -57,11 +57,14 @@ def avg_value(values):
     value = 0
     count = 0
     avg = 0
-    for v in values:
-        value += int(v)
-        count += 1
-        avg = int(value/count)
-    return avg
+    try:
+        for v in values:
+            value += int(v)
+            count += 1
+            avg = int(value/count)
+        return avg
+    except ValueError:
+        return 'Can not count the average value since the values are not numeric values'
 
 
 def max_value(values):

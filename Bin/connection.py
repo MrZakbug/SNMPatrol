@@ -19,7 +19,12 @@ def snmp_walk():
         print('here')
     else:
         for varBind in varBinds:
+            print(varBind[1])
             print(' = '.join([x.prettyPrint() for x in varBind]) + '\n')
 
 if __name__ == '__main__':
-    print(snmp_walk())
+    #print(snmp_walk())
+    name = 'SERV-01'
+    mib = 'ifDesc.1'
+    table_name = '_'.join([name, mib])
+    print(table_name)

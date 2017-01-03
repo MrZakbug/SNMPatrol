@@ -1,4 +1,5 @@
 import import_data
+from pysnmp.hlapi import *
 
 
 class Device:
@@ -23,6 +24,28 @@ class Device:
         # Ping
         return os.system("ping " + ping_str + " " + self.address_Ip) == 0
 
+    def snmp_walk(self):
+
+        for oid in self.list_of_mibs:
+            error_indication, error_status, error_index, var_binds = next(
+                getCmd(SnmpEngine(),
+                       CommunityData('public'),
+                       UdpTransportTarget(('demo.snmplabs.com', 161)),
+                       ContextData(),
+                       ObjectType(ObjectIdentity(oid)))
+            )
+
+            if error_indication:
+                print(error_indication)
+            elif error_status:
+                print('%s at %s' % (error_status.prettyPrint(),
+                                    error_index and var_binds[int(error_index) - 1][0] or '?'))
+                print('here')
+            else:
+                for varBind in var_binds:
+                    m = varBind[0].prettyPrint()
+                    table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
+                    import_data.insert_data(table_name, str(varBind[1]))
 
 if __name__ == '__main__':
     dictionary = {'Device Name': 'SERV-01',
@@ -37,5 +60,6 @@ if __name__ == '__main__':
                      dictionary['Device OS'],
                      dictionary['Device Type'])
 
-    print(device1.ping())
-    print(device1.list_of_mibs)
+    #print(device1.ping())
+    #print(device1.list_of_mibs)
+    device1.snmp_walk()
