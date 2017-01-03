@@ -9,7 +9,7 @@ class Device:
         self.dns_name = dns
         self.os = os
         self.d_type = d_type
-        self.list_of_mibs = import_data.list_of_value_mib(self.name)
+        self.list_of_oids = import_data.list_of_value_mib(self.name)
 
     def ping(self):
         """
@@ -26,7 +26,7 @@ class Device:
 
     def snmp_walk(self):
 
-        for oid in self.list_of_mibs:
+        for oid in self.list_of_oids:
             error_indication, error_status, error_index, var_binds = next(
                 getCmd(SnmpEngine(),
                        CommunityData('public'),
@@ -61,5 +61,5 @@ if __name__ == '__main__':
                      dictionary['Device Type'])
 
     #print(device1.ping())
-    #print(device1.list_of_mibs)
+    #print(device1.list_of_oids)
     device1.snmp_walk()
