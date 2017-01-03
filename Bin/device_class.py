@@ -48,9 +48,9 @@ class Device:
                     import_data.insert_data(table_name, str(varBind[1]))
 
 if __name__ == '__main__':
-    dictionary = {'Device Name': 'SERV-01',
+    dictionary = {'Device Name': 'test',
                   'Device IP Address': '8.8.8.8',
-                  'Device DNS': 'SERV-01',
+                  'Device DNS': 'test',
                   'Device OS': 'Windows',
                   'Device Type': 'Server'}
 
