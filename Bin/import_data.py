@@ -69,7 +69,7 @@ def warning_trigger(m, value):
         return avg
 
 
-    '''
+"""
 def insert_test_data():
     start_date = date(2016, 11, 1).toordinal()
     end_date = date.today().toordinal()
@@ -101,7 +101,7 @@ def insert_test_data():
                        (date.fromordinal(random.randint(start_date, end_date)), random_time, random.randrange(20, 100)))
 
             db.commit()
-    '''
+"""
 
 if __name__ == '__main__':
     warning_trigger(m='ifInOctets1', value=100)

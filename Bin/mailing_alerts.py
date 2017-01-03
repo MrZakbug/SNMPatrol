@@ -8,10 +8,10 @@ email_subject = 'Subject: SNMPatrol Alert'
 
 
 def create_msg(hardware_name, mib, trigger, medium):
-    '''
+    """
     Checks what type of alert is assigned to mib provided
     and return proper message based on values provided ready to sent
-    '''
+    """
     alert_type = {'ifInOctets1': 'latency'}
 
     msg = "Hello!\n\nThis is an alert from your SNMPatrol system.\
