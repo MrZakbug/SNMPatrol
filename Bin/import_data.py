@@ -44,7 +44,7 @@ def get_mib_list_values():
     return mib, value
 """
 
-def insert_data(table_name, value):
+def insert_data(table_name, value, device_name):
     # Connect/creates a database, creates tables if don't exist, puts data into
     db = sqlite3.connect('SNMPatrol.db')  # Create a database
 
@@ -56,15 +56,15 @@ def insert_data(table_name, value):
     db.execute('insert into {} (date, datetime, value) values (?, ?, ?)'.format(table_name),
                (strftime("%Y-%m-%d", ), strftime("%H:%M:%S", ), value))
     db.commit()
-    warning_trigger(table_name, value)
+    warning_trigger(table_name, value, device_name)
 
 
-def warning_trigger(m, value):
+def warning_trigger(table_name, value, device_name):
     today = date.today()
-    avg = process.avg_value(process.import_data(m, today - timedelta(days=1), today))
+    avg = process.avg_value(process.import_data(table_name, today - timedelta(days=1), today))
     if type(avg) is int or type(avg) is float:
         if value > avg*5:
-            mail.send_email(mail.sender, mail.recipients, mail.email_subject, mail.create_msg('PL-S001', m, value, avg))
+            mail.send_email(mail.sender, mail.email_subject, mail.create_msg(device_name, m, value, avg))
     else:
         return avg
 

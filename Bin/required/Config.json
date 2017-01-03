@@ -20,9 +20,16 @@
 }],
 "Users":
 [
-{"User Name": "",
-"User Login": "",
-"User Password": "",
-"User Group": ""
-}]
+  {"User Name": "",
+  "User Email": ""
+  },
+  {"User Name": "",
+  "User Email": ""
+  },
+  {"User Name": "",
+  "User Email": ""
+  },
+  {"User Name": "",
+  "User Email": ""
+  }]
 }
