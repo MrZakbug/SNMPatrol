@@ -25,6 +25,14 @@ def create_msg(hardware_name, mib, trigger, medium):
     return msg
 
 
+def no_response_alert(hardware_name, error_indication):
+    msg = error_indication.join(["Hello!\n\nThis is a critical alert from your SNMPatrol system.\
+    \n\nThis mail's purpose is to report that your hardware named {} encountered a critical error.\
+    \n\nThe error indication/status received is:\n '".format(hardware_name), "'\n\n Please check you device\
+    \n\nSincerely,\nYour SNMPatrol."])
+    return msg
+
+
 def get_email_addresses():
     recipients = []
     data_file = open('required\\Config.json', 'r')
