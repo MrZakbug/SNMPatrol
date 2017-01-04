@@ -1,4 +1,5 @@
 import import_data
+import mailing_alerts as mail
 from pysnmp.hlapi import *
 
 
@@ -10,6 +11,7 @@ class Device:
         self.os = os
         self.d_type = d_type
         self.list_of_oids = import_data.list_of_value_mib(self.name)
+        self.tables = []
 
     def ping(self):
         """
@@ -30,21 +32,25 @@ class Device:
             error_indication, error_status, error_index, var_binds = next(
                 getCmd(SnmpEngine(),
                        CommunityData('public'),
-                       UdpTransportTarget(('demo.snmplabs.com', 161)),
+                       UdpTransportTarget((self.address_Ip, 161)),
                        ContextData(),
                        ObjectType(ObjectIdentity(oid)))
             )
 
             if error_indication:
-                print(error_indication)
+                mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error_indication))
+                break
             elif error_status:
-                print('%s at %s' % (error_status.prettyPrint(),
-                                    error_index and var_binds[int(error_index) - 1][0] or '?'))
-                print('here')
+                error = '{} at %{}'.format(error_status.prettyPrint(),
+                                           error_index and var_binds[int(error_index) - 1][0] or '?')
+                mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error))
+                break
             else:
                 for varBind in var_binds:
                     m = varBind[0].prettyPrint()
                     table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
+                    if table_name not in self.tables:
+                        self.tables.append(table_name)
                     mib = m.split('::')[1]
                     import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
 
