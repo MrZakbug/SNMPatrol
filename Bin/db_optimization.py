@@ -57,6 +57,11 @@ def previous_months_optimization(table_name):
         db.commit()
 
 
+def data_base_optimization(table_name):
+    last_week_optimization(table_name)
+    last_month_optimization(table_name)
+    last_month_optimization(table_name)
+
 if __name__ == '__main__':
     db = sqlite3.connect('SNMPatrol.db')
     # previous_months_optimization('hrDeviceDescr196608')
