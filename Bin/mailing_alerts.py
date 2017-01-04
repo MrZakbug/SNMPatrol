@@ -12,7 +12,10 @@ def create_msg(hardware_name, mib, trigger, medium):
     Checks what type of alert is assigned to mib provided
     and return proper message based on values provided ready to sent
     """
-    alert_type = {'ifInOctets1': 'latency'}
+    alert_type = {'sysDescr.0': 'System description', 'sysLocation.0': 'System location',
+                  'enterprises.2021.10.1.3.2': 'Enterprise', 'enterprises.2021.10.1.3.3': 'Enterprise',
+                  'enterprises.2021.11.50.0': 'Enterprise', 'enterprises.2021.11.10.0': 'Enterprise',
+                  }
 
     msg = "Hello!\n\nThis is an alert from your SNMPatrol system.\
     \n\nThis mail's purpose is to report that your hardware named {} have just encountered a problem\

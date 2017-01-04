@@ -45,7 +45,8 @@ class Device:
                 for varBind in var_binds:
                     m = varBind[0].prettyPrint()
                     table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
-                    import_data.insert_data(table_name, str(varBind[1]), self.name)
+                    mib = m.split('::')[1]
+                    import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
 
 if __name__ == '__main__':
     dictionary = {'Device Name': 'test',
