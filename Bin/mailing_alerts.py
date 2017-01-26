@@ -49,10 +49,9 @@ def create_msg(hardware_name, mib, trigger, medium):
 
 
 def no_response_alert(hardware_name, error_indication):
-    msg = error_indication.join(["Hello!\n\nThis is a critical alert from your SNMPatrol system.\
-    \n\nThis mail's purpose is to report that your hardware named {} encountered a critical error.\
-    \n\nThe error indication/status received is:\n '".format(hardware_name), "'\n\n Please check you device\
-    \n\nSincerely,\nYour SNMPatrol."])
+    msg = "Hello!\n\nThis is a critical alert from your SNMPatrol system. \n\nThis mail's purpose is to report that" \
+          " your hardware named {} encountered a critical error.\n\nThe error indication/status received is:\n " \
+          "'".format(hardware_name) + error_indication + "'\n\nPlease check you device\n\nSincerely,\nYour SNMPatrol."
     return msg
 
 
@@ -82,7 +81,8 @@ def send_email(sender, subject, message):
 
 
 if __name__ == '__main__':
-    print(create_msg('Server01', 'ifOutOctets.3', 89, 65))
+    # print(create_msg('Server01', 'ifOutOctets.3', 89, 65))
     # send_email(sender, recipients, email_subject, create_msg(hardware_name, mib, trigger, overMedium))
     # send_email(email_login, recipients, email_subject, create_msg('PL-S001', '1', '98', '56'))
     # print(get_email_addresses())
+    print(no_response_alert('dupa', 'dupa'))
