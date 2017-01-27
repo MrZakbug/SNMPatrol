@@ -4,12 +4,13 @@ from pysnmp.hlapi import *
 
 
 class Device:
-    def __init__(self, name, ip, dns, os, d_type):
-        self.name = name
-        self.address_Ip = ip
-        self.dns_name = dns
-        self.os = os
-        self.d_type = d_type
+    def __init__(self, name, ip, dns, os, d_type, notifications_enabled):
+        self.name = str(name)
+        self.address_Ip = str(ip)
+        self.dns_name = str(dns)
+        self.os = str(os)
+        self.d_type = str(d_type)
+        self.notifications_enabled = str(notifications_enabled)
         self.list_of_oids = import_data.list_of_value_mib(self.name)
         self.tables = []
 
@@ -36,23 +37,36 @@ class Device:
                        ContextData(),
                        ObjectType(ObjectIdentity(oid)))
             )
-
-            if error_indication:
-                mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error_indication))
-                break
-            elif error_status:
-                error = '{} at %{}'.format(error_status.prettyPrint(),
-                                           error_index and var_binds[int(error_index) - 1][0] or '?')
-                mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error))
-                break
+            if self.notifications_enabled.lower() == 'true':
+                if error_indication:
+                    mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error_indication))
+                    break
+                elif error_status:
+                    error = '{} at %{}'.format(error_status.prettyPrint(),
+                                               error_index and var_binds[int(error_index) - 1][0] or '?')
+                    mail.send_email(mail.email_subject, mail.no_response_alert(self.name, error))
+                    break
+                else:
+                    for varBind in var_binds:
+                        m = varBind[0].prettyPrint()
+                        table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
+                        if table_name not in self.tables:
+                            self.tables.append(table_name)
+                        mib = m.split('::')[1]
+                        import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
             else:
-                for varBind in var_binds:
-                    m = varBind[0].prettyPrint()
-                    table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
-                    if table_name not in self.tables:
-                        self.tables.append(table_name)
-                    mib = m.split('::')[1]
-                    import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
+                if error_indication:
+                    break
+                elif error_status:
+                    break
+                else:
+                    for varBind in var_binds:
+                        m = varBind[0].prettyPrint()
+                        table_name = '_'.join([self.name, m.split('::')[1]]).join(['"', '"'])
+                        if table_name not in self.tables:
+                            self.tables.append(table_name)
+                        mib = m.split('::')[1]
+                        import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
 
 if __name__ == '__main__':
     dictionary = {'Device Name': 'test',

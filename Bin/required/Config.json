@@ -4,19 +4,22 @@
 "Device IP Address": "10.5.0.1" ,
 "Device DNS": "SERV-01",
 "Device OS": "Windows",
-"Device Type": "Server"
+"Device Type": "Server",
+"Notifications Enabled": "False"
 },
 {"Device Name": "SERV-02",
 "Device IP Address":"10.5.0.2",
 "Device DNS": "SERV02",
 "Device OS": "Windows",
 "Device Type": "Server"
+"Notifications Enabled": "False"
 },
 {"Device Name": "SW-100",
 "Device IP Address": "10.5.1.1",
 "Device DNS": "SW-100",
 "Device OS": "Unix",
 "Device Type": "Switch"
+"Notifications Enabled": "False"
 }],
 "Users":
 [

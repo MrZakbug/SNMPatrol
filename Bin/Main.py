@@ -16,7 +16,7 @@ def create_device_instances():
     for device_config in config["Devices"]:
         devices_list.append(device_class.Device(device_config["Device Name"], device_config["Device IP Address"],
                                                 device_config["Device DNS"], device_config["Device OS"],
-                                                device_config["Device Type"]))
+                                                device_config["Device Type"], device_config["Notifications Enabled"]))
     return devices_list
 
 
