@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import os
 from time import strftime, sleep
 import mailing_alerts as mail
 import process_data as process
@@ -15,7 +16,7 @@ files = ['MIB16', 'MIB2', 'MIB3', 'MIB4', 'MIB5',
 def list_of_value_mib(name):
     # Read file and create a list of MIBs of value
     # Read file with MIBs we want
-    value_mibs_path = 'required\\neededOIDs-' + name + '.txt'
+    value_mibs_path = os.path.join('required', 'neededOIDs-' + name + '.txt')
     read_file = open(value_mibs_path, 'r')
     # Create a list
     value_mibs = []
@@ -103,7 +104,8 @@ def insert_test_data():
 """
 
 if __name__ == '__main__':
-    warning_trigger(m='ifInOctets1', value=100)
+    # list_of_value_mib('xyz')
+    # warning_trigger(m='ifInOctets1', value=100)
     '''
     db = sqlite3.connect('SNMPatrol.db')
     for i in range(0, 100):

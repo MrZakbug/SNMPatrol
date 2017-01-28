@@ -69,18 +69,22 @@ class Device:
                         import_data.insert_data(table_name, mib, str(varBind[1]), self.name)
 
 if __name__ == '__main__':
-    dictionary = {'Device Name': 'test',
-                  'Device IP Address': '8.8.8.8',
-                  'Device DNS': 'test',
-                  'Device OS': 'Windows',
-                  'Device Type': 'Server'}
+
+    dictionary = {"Device Name": "SERV-01",
+                  "Device IP Address": "10.5.0.1",
+                  "Device DNS": "SERV-01",
+                  "Device OS": "Windows",
+                  "Device Type": "Server",
+                  "Notifications Enabled": "False"
+}
 
     device1 = Device(dictionary['Device Name'],
                      dictionary['Device IP Address'],
                      dictionary['Device DNS'],
                      dictionary['Device OS'],
-                     dictionary['Device Type'])
+                     dictionary['Device Type'],
+                     dictionary["Notifications Enabled"])
 
-    #print(device1.ping())
-    #print(device1.list_of_oids)
-    device1.snmp_walk()
+    # print(device1.ping())
+    # print(device1.list_of_oids)
+    # device1.snmp_walk()

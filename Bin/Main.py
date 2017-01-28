@@ -2,6 +2,7 @@ import device_class
 import db_optimization
 import json
 import multiprocessing
+import os
 from time import sleep, strftime
 
 
@@ -9,7 +10,7 @@ def create_device_instances():
     """
     Creates a list of device instances stated in config.json file
     """
-    data_file = open('required\\Config.json', 'r')
+    data_file = open(os.path.join('required', 'Config.json'), 'r')
     config = json.load(data_file)
     data_file.close()
     devices_list = []

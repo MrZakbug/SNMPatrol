@@ -1,5 +1,6 @@
 import smtplib
 import json
+import os
 
 email_login = ''
 email_password = ''
@@ -58,7 +59,7 @@ def no_response_alert(hardware_name, error_indication):
 
 def get_email_addresses():
     recipients = []
-    data_file = open('required\\Config.json', 'r')
+    data_file = open(os.path.join('required', 'Config.json'), 'r')
     config = json.load(data_file)
     data_file.close()
     for user in config["Users"]:
@@ -86,4 +87,4 @@ if __name__ == '__main__':
     # send_email(sender, recipients, email_subject, create_msg(hardware_name, mib, trigger, overMedium))
     # send_email(email_login, recipients, email_subject, create_msg('PL-S001', '1', '98', '56'))
     # print(get_email_addresses())
-    print(no_response_alert('dupa', 'dupa'))
+    print(no_response_alert('xyz', 'xyz'))
