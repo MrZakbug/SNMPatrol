@@ -38,6 +38,7 @@ def main(device_instance):
 
 if __name__ == '__main__':
     devices = create_device_instances()
+
     today = strftime("%Y-%m-%d", )
     optimized_today = False
     while True:
